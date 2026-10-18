@@ -1,14 +1,16 @@
 name: Build Android APK
 
-# Place this file at the REPO ROOT: .github/workflows/android-apk.yml
-# GitHub only runs workflows from there, never from a sub-folder.
-# The Capacitor project lives in a sub-folder (APP_DIR below).
+# Builds an installable debug APK of the Capacitor Android shell.
+# Run it manually: GitHub repo -> Actions -> "Build Android APK" -> Run workflow.
+# It also runs automatically when the Android/Capacitor files change on main.
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths:
-      - "pop-up-fixer-apk-min/pop-up-fixer-apk-min/**"
+      - "android/**"
+      - "capacitor.config.ts"
+      - "capacitor-webroot/**"
       - ".github/workflows/android-apk.yml"
 
 concurrency:
@@ -19,10 +21,6 @@ jobs:
   build-apk:
     runs-on: ubuntu-latest
     timeout-minutes: 40
-
-    defaults:
-      run:
-        working-directory: pop-up-fixer-apk-min/pop-up-fixer-apk-min
 
     steps:
       - name: Checkout
@@ -45,6 +43,13 @@ jobs:
       - name: Set up Gradle (with cache)
         uses: gradle/actions/setup-gradle@v4
 
+      # bun.lock exported from Lovable pins every package to Lovable's private
+      # registry (europe-west*-npm.pkg.dev), which GitHub runners cannot reach.
+      # Same packages and versions exist on the public npm registry, so point the
+      # lockfile there for this build only (the file in the repo is not changed).
+      - name: Point bun.lock at the public npm registry
+        run: sed -i -E 's#https://europe-west[0-9]+-npm\.pkg\.dev/lovable-core-prod/[^/]+/#https://registry.npmjs.org/#g' bun.lock
+
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
@@ -54,8 +59,8 @@ jobs:
         run: npx cap sync android
 
       - name: Build debug APK
+        working-directory: android
         run: |
-          cd android
           chmod +x ./gradlew
           ./gradlew assembleDebug --stacktrace
 
@@ -63,6 +68,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: food-fashion-debug-apk
-          path: pop-up-fixer-apk-min/pop-up-fixer-apk-min/android/app/build/outputs/apk/debug/*.apk
+          path: android/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 30
