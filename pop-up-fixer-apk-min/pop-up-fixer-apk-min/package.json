@@ -1,0 +1,19 @@
+{
+  "name": "food-fashion-android",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/camera": "^8.2.4",
+    "@capacitor/cli": "^8.5.2",
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/geolocation": "^8.2.2",
+    "@capacitor/local-notifications": "^8.3.1",
+    "@capacitor/push-notifications": "^8.1.2",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
