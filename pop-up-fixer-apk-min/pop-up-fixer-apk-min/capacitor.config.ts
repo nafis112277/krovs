@@ -14,7 +14,7 @@ const config: CapacitorConfig = {
   appName: "Food Fashion",
   webDir: "capacitor-webroot",
   server: {
-    url: "https://project--6da8f5c0-83a7-41f2-b031-699e72a5ead3.lovable.app",
+    url: "https://foodfashion.lovable.app",
     androidScheme: "https",
     cleartext: false,
   },
