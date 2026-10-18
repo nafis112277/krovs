@@ -14,7 +14,7 @@ const config: CapacitorConfig = {
   appName: "Food Fashion",
   webDir: "capacitor-webroot",
   server: {
-    url: "https://foodfashion.lovable.app",
+    url: "https://recipe-magic-nearby.lovable.app",
     androidScheme: "https",
     cleartext: false,
   },
