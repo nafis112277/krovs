@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+// Release workflow passes the GitHub run number so every release APK has a higher
+// versionCode than the last one (Android only accepts updates with a higher number).
+def releaseVersionCode = (System.getenv("VERSION_CODE") ?: "1").toInteger()
+
 android {
     namespace = "app.smartpantryai.mobile"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -7,7 +11,7 @@ android {
         applicationId "app.smartpantryai.mobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
+        versionCode releaseVersionCode
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
@@ -16,11 +20,31 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        release {
+            // Filled from environment variables by the "Build Signed Release APK" workflow.
+            // Without them (local or debug builds) the release APK is simply left unsigned.
+            def keystorePath = System.getenv("KEYSTORE_FILE")
+            if (keystorePath) {
+                storeFile file(keystorePath)
+                storePassword System.getenv("KEYSTORE_PASSWORD")
+                keyAlias System.getenv("KEY_ALIAS")
+                keyPassword System.getenv("KEY_PASSWORD")
+            }
+        }
+    }
     buildTypes {
         release {
+            if (System.getenv("KEYSTORE_FILE")) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    lint {
+        // Keeps the CI release build from failing on lint-only checks.
+        checkReleaseBuilds = false
     }
 }
 
@@ -36,6 +60,7 @@ dependencies {
     implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
     implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
     implementation project(':capacitor-android')
+    implementation "com.google.android.gms:play-services-ads:25.4.+"
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"

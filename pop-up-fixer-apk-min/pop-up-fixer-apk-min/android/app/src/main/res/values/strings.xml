@@ -4,4 +4,12 @@
     <string name="title_activity_main">Food Fashion</string>
     <string name="package_name">app.smartpantryai.mobile</string>
     <string name="custom_url_scheme">app.smartpantryai.mobile</string>
+
+    <!-- AdMob REAL IDs (release builds). Debug builds override these with Google's public
+         TEST IDs from src/debug/res/values/admob_test_ids.xml, so tapping ads while
+         developing never touches the live account.
+         admob_app_id    format: ca-app-pub-XXXXXXXXXXXXXXXX~YYYYYYYYYY   (note the ~)
+         admob_banner_id format: ca-app-pub-XXXXXXXXXXXXXXXX/ZZZZZZZZZZ   (note the /) -->
+    <string name="admob_app_id">ca-app-pub-8242237631871191~6484296024</string>
+    <string name="admob_banner_id">ca-app-pub-8242237631871191/8601438886</string>
 </resources>

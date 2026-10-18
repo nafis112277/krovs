@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Debug builds (the APK from GitHub Actions) always use Google's public TEST ads,
+         so you can run and tap ads safely. Release builds use the real IDs in
+         src/main/res/values/strings.xml. Delete this file to test with real IDs. -->
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="admob_banner_id">ca-app-pub-3940256099942544/6300978111</string>
+</resources>

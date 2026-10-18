@@ -9,6 +9,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!-- AdMob app ID (value lives in res/values/strings.xml). The app crashes at start if this is missing or malformed. -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_app_id" />
+
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density"
             android:name=".MainActivity"
@@ -39,6 +44,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Advertising ID, used by AdMob (required when targeting Android 13+) -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 
     <!-- Camera: photographing ingredients and scanning receipts -->
     <uses-permission android:name="android.permission.CAMERA" />
